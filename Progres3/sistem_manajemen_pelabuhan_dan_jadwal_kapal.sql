@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 24, 2026 at 04:37 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Waktu pembuatan: 24 Jun 2026 pada 16.53
+-- Versi server: 10.4.32-MariaDB
+-- Versi PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dermaga`
+-- Struktur dari tabel `dermaga`
 --
 
 CREATE TABLE `dermaga` (
@@ -33,10 +33,18 @@ CREATE TABLE `dermaga` (
   `Kapasitas_Max` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `dermaga`
+--
+
+INSERT INTO `dermaga` (`ID_Dermaga`, `Nama_Dermaga`, `Kapasitas_Max`) VALUES
+('DMG-01', 'Dermaga Utara 1', 200),
+('DMG-02', 'Dermaga Selatan 2', 100);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jadwal_tambatan`
+-- Struktur dari tabel `jadwal_tambatan`
 --
 
 CREATE TABLE `jadwal_tambatan` (
@@ -49,10 +57,18 @@ CREATE TABLE `jadwal_tambatan` (
   `Total_Tagihan` decimal(12,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `jadwal_tambatan`
+--
+
+INSERT INTO `jadwal_tambatan` (`ID_Jadwal`, `ID_Kapal`, `ID_Dermaga`, `ETA`, `ETD`, `Status_Kapal`, `Total_Tagihan`) VALUES
+(1, 'KPL-01', 'DMG-01', '2026-06-25 08:00:00', '2026-06-27 17:00:00', 'Berthed', 25000000.00),
+(2, 'KPL-02', 'DMG-02', '2026-06-28 10:00:00', '2026-06-28 15:00:00', 'Waiting', 5000000.00);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kapal`
+-- Struktur dari tabel `kapal`
 --
 
 CREATE TABLE `kapal` (
@@ -64,10 +80,18 @@ CREATE TABLE `kapal` (
   `Bendera_Negara` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `kapal`
+--
+
+INSERT INTO `kapal` (`ID_Kapal`, `Nama_Kapal`, `Tipe_Kapal`, `GT_Weight`, `LOA`, `Bendera_Negara`) VALUES
+('KPL-01', 'Samudera Jaya', 'Kargo', 15000, 145.50, 'Indonesia'),
+('KPL-02', 'Nusantara Indah', 'Penumpang', 8000, 95.00, 'Indonesia');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kontainer`
+-- Struktur dari tabel `kontainer`
 --
 
 CREATE TABLE `kontainer` (
@@ -79,17 +103,25 @@ CREATE TABLE `kontainer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data untuk tabel `kontainer`
+--
+
+INSERT INTO `kontainer` (`No_Kontainer`, `ID_Jadwal`, `Ukuran_Kontainer`, `Jenis_Barang`, `Koordinat_Yard`) VALUES
+('MSCU1234567', 1, '40 feet', 'Elektronik', 'Blok A-Slot 05'),
+('NYKU7654321', 1, '20 feet', 'Bahan Makanan', 'Blok B-Slot 02');
+
+--
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `dermaga`
+-- Indeks untuk tabel `dermaga`
 --
 ALTER TABLE `dermaga`
   ADD PRIMARY KEY (`ID_Dermaga`);
 
 --
--- Indexes for table `jadwal_tambatan`
+-- Indeks untuk tabel `jadwal_tambatan`
 --
 ALTER TABLE `jadwal_tambatan`
   ADD PRIMARY KEY (`ID_Jadwal`),
@@ -97,41 +129,41 @@ ALTER TABLE `jadwal_tambatan`
   ADD KEY `ID_Dermaga` (`ID_Dermaga`);
 
 --
--- Indexes for table `kapal`
+-- Indeks untuk tabel `kapal`
 --
 ALTER TABLE `kapal`
   ADD PRIMARY KEY (`ID_Kapal`);
 
 --
--- Indexes for table `kontainer`
+-- Indeks untuk tabel `kontainer`
 --
 ALTER TABLE `kontainer`
   ADD PRIMARY KEY (`No_Kontainer`),
   ADD KEY `ID_Jadwal` (`ID_Jadwal`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `jadwal_tambatan`
+-- AUTO_INCREMENT untuk tabel `jadwal_tambatan`
 --
 ALTER TABLE `jadwal_tambatan`
-  MODIFY `ID_Jadwal` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Jadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `jadwal_tambatan`
+-- Ketidakleluasaan untuk tabel `jadwal_tambatan`
 --
 ALTER TABLE `jadwal_tambatan`
   ADD CONSTRAINT `jadwal_tambatan_ibfk_1` FOREIGN KEY (`ID_Kapal`) REFERENCES `kapal` (`ID_Kapal`) ON UPDATE CASCADE,
   ADD CONSTRAINT `jadwal_tambatan_ibfk_2` FOREIGN KEY (`ID_Dermaga`) REFERENCES `dermaga` (`ID_Dermaga`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `kontainer`
+-- Ketidakleluasaan untuk tabel `kontainer`
 --
 ALTER TABLE `kontainer`
   ADD CONSTRAINT `kontainer_ibfk_1` FOREIGN KEY (`ID_Jadwal`) REFERENCES `jadwal_tambatan` (`ID_Jadwal`) ON DELETE CASCADE;
